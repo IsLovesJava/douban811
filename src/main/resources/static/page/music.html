@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>音乐数据统计分析</title>
+
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body>
+<div id="main2" style="width: 800px;height:400px;"></div>
+</body>
+<script type="text/javascript">
+    {
+        var chartDom2 = document.getElementById('main2');
+        var myChart2 = echarts.init(chartDom2);
+        var option2;
+
+        var singerName = []
+
+        option2 = {
+            xAxis: {},
+            yAxis: {},
+
+            tooltip: {
+                position: 'top',
+                formatter: function (params, index) {
+                    return singerName[parseInt(index.split('_')[2])] + "<br>" + params.value[0] + " 首歌" + "<br>" + "平均评分: " + (""+params.value[1]).substring(0,3)
+                }
+            },
+            series: [{
+                symbolSize: 10,
+                data: [],
+                type: 'scatter'
+            }]
+
+        };
+
+        $.get('../popularSinger?amount=20').done(function (data) {
+            var dd = []
+            for (var s = 0; s < 20; s++) {
+                singerName.push(data[s].name)
+                dd.push([data[s].songCount, data[s].avgRating])
+            }
+            myChart2.setOption({
+                series: [{
+                    data: dd
+                }]
+            })
+        });
+        option2 && myChart2.setOption(option2);
+    }
+</script>
+</html>

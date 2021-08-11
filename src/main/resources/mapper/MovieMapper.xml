@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pan.demo.mapper.MovieMapper">
+    <resultMap id="ratingCount" type="com.pan.demo.pojo.ScatterChart">
+        <id property="id" column="id"/>
+        <collection property="movieNameList" column="movieNameList"
+                    ofType="java.lang.String"
+                    select="com.pan.demo.mapper.MovieMapper.selectMovieNameList"/>
+
+        <collection property="ratingCountList" column="ratingCountList"
+                    ofType="java.lang.Integer"
+                    select="com.pan.demo.mapper.MovieMapper.selectRatingCountList"/>
+
+        <collection property="ratingList" column="ratingList"
+                    ofType="java.lang.Double"
+                    select="com.pan.demo.mapper.MovieMapper.selectRatingList"/>
+    </resultMap>
+
+    <select id="selectRatingWithCount" resultMap="ratingCount">
+        select movieName,ratingCount,ratingValue from movie_info;
+    </select>
+
+</mapper>

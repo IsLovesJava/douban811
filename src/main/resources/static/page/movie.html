@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电影数据统计分析</title>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body>
+<div style="display: flex;flex-wrap: wrap">
+    <div id="main" style="width: 800px;height:400px;"></div>
+    <div id="main2" style="width: 800px;height:400px;"></div>
+    <div id="main3" style="width: 800px;height:400px;"></div>
+    <div id="main4" style="width: 800px;height:400px;"></div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+    {
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '电影评分分布情况',
+                subtext: '纯属虚构',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    type: 'pie',
+                    radius: '50%',
+                    data: [],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        $.get('../getrating').done(function (data) {
+            // 填入数据
+            var jsonData1 = JSON.parse(data)
+            myChart.setOption({
+                title: {
+                    text: jsonData1.text,
+                    subtext: jsonData1.subtext
+                },
+                series: [{
+                    data: jsonData1.data
+                }]
+            })
+
+        });
+
+        option && myChart.setOption(option);
+    }
+
+
+    {
+        var chartDom2 = document.getElementById('main2');
+        var myChart2 = echarts.init(chartDom2);
+        var option2;
+
+        var movieName = []
+
+        option2 = {
+            xAxis: {},
+            yAxis: {},
+
+            tooltip: {
+                position: 'top',
+                formatter: function (params, index) {
+                    return movieName[parseInt(index.split('_')[2])] + "<br>" + params.value[0] + " 人评分" + "<br>" + "平均评分: " + params.value[1]
+                }
+            },
+            series: [{
+                symbolSize: 10,
+                data: [],
+                type: 'scatter'
+            }]
+
+        };
+
+        $.get('../getRatingAndCount').done(function (data) {
+            // 填入数据
+            var jsonData2 = JSON.parse(data)
+            myChart2.setOption({
+                series: [{
+                    data: jsonData2.data
+                }]
+            })
+            movieName = jsonData2.movieNameList
+
+        });
+
+        option2 && myChart2.setOption(option2);
+    }
+
+    {
+        var chartDom3 = document.getElementById('main3');
+        var myChart3 = echarts.init(chartDom3);
+        var option3;
+
+        option3 = {
+            title: {
+                text: '',
+                subtext: '',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    type: 'pie',
+                    radius: '50%',
+                    data: [],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        $.get('../getLocation').done(function (data) {
+            // 填入数据
+            var jsonData3 = JSON.parse(data)
+            myChart3.setOption({
+                title: {
+                    text: jsonData3.text,
+                    subtext: jsonData3.subtext
+                },
+                series: [{
+                    data: jsonData3.data
+                }]
+            })
+
+        });
+
+        option3 && myChart3.setOption(option3);
+    }
+
+    {
+        var chartDom4 = document.getElementById('main4');
+        var myChart4 = echarts.init(chartDom4);
+        var option4;
+
+        option4 = {
+            title: {
+                text: '一年内个月上映情况'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['2021', '2020']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['一月', '二月', '三月', '四月', '五月', '六月'
+                    , '七月', '八月', '九月', '十月', '十一月', '十二月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: []
+
+        };
+        $.ajax({
+            url : '../getMonthCount?year=2021',
+            type : "get",
+            async : false,
+            cache : false,
+            dataType : "json",
+            iModified:true,
+            success : function(data) {
+                option4.series.push({
+                    name: '2021',
+                    type: 'line',
+                    stack: '总量',
+                    data: data.data
+                })
+                myChart4.setOption(option4)
+            },
+            error : function(errorMsg) {
+                alert("请求数据失败");
+            }
+        });
+
+        $.ajax({
+            url : '../getMonthCount?year=2020',
+            type : "get",
+            async : false,
+            cache : false,
+            dataType : "json",
+            iModified:true,
+            success : function(result) {
+                var s = {
+                    name: "2020",
+                    type: 'line',
+                    stack: '总量',
+                    data: result.data
+                }
+                option4.series.push(s)
+                myChart4.setOption(option4)
+            },
+            error : function(errorMsg) {
+                alert("请求数据失败");
+            }
+        });
+
+        option4 && myChart4.setOption(option4);
+    }
+</script>
+</html>

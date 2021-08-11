@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body>
+    <div id="movieList" style="display: flex;flex-wrap: wrap;width: 1000px" >
+        <div th:each="ss : ${movieList}" style="margin-left: 20px">
+            <a  th:href="'https://movie.douban.com/subject/'+${ss}+'/'" th:text="${ss}"></a>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+</script>
+</html>

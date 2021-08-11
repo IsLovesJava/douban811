@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../js/jquery.min.js"></script>
+    <link rel="icon" href="../favicon.png">
+    <title>注册</title>
+    <style>
+        .body{
+            position:fixed;left: 50%;width: 800px;height: 500px;transform: translateX(-400px);display: flex
+        }
+        .body-left{
+            height: 100%;width: 200px;
+            transform: translateY(20px);
+        }
+        .left-line{
+            height: 80px;
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .left-line span{
+            height: 60px;
+            font-size: 22px;
+            line-height: 60px;
+        }
+
+        .body-right{
+            height: 100%;width: 600px;
+            transform: translateY(20px);
+        }
+        .right-line{
+            height: 80px;
+            width: 600px;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .right-input{
+            height: 60px;
+            width: 100%;
+        }
+        .bottom-tips{
+            height: 20px;
+            width: 600px;
+        }
+        .bottom-tips span{
+            color: red;
+            font-size: 14px;
+            position: absolute;
+            margin-left: 40px;
+        }
+        .registerEnsure{
+            color: rgba(255, 255, 255, 1.0);
+            border-radius: 10px;
+            border: none;
+            background-color: #0066ff;
+            width: 150px;
+            height: 60px;
+            font-size: 28px;
+            font-weight: 600;
+            margin-left: 50px;
+            margin-top: 20px;
+            outline: none;
+        }
+        .inputDiv{
+            position: relative;
+            float: left;
+            display: inline-block;
+
+            width: 360px;
+            height: 60px;
+            left: 20px;
+            border-radius: 5px;
+            box-shadow: inset 5px 5px 10px rgba(204, 197, 197,.5),
+            inset -5px -5px 8px rgba(204, 197, 197,.5);
+        }
+        .inputDiv input{
+            position: absolute;
+            left: 20px;
+            height: 60px;
+            width: 300px;
+            font-size: 18px;
+            outline: none;
+            border: none;
+
+            background-color:transparent;
+        }
+        .inputDiv input::placeholder{
+            color: rgba(67, 67, 67,.8);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="body" style="background:#e9fdff;border-radius: 20px">
+    <div class="body-left" >
+        <div class="left-line" ><span>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>        </div>
+        <div class="left-line" ><span>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</span>        </div>
+        <div class="left-line"><span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</span>        </div>
+        <div class="left-line"> <span>确认密码</span> </div>
+    </div>
+
+    <div class="body-right">
+
+        <div class="right-line" >
+            <div class="right-input">
+                <div class="inputDiv" >
+                    <input type="text" class="inputBox" id='name' style="ime-mode: disabled;" >
+                </div>
+            </div>
+            <div class="bottom-tips" ><span id="nameTipsText"></span></div>
+        </div>
+
+        <div class="right-line" >
+            <div class="right-input">
+                <div class="inputDiv" >
+                    <input type="text" class="inputBox" id='email' style="ime-mode: disabled;" >
+                </div>
+            </div>
+            <div class="bottom-tips" ><span id="emailTipsText"></span></div>
+        </div>
+
+        <div class="right-line">
+            <div class="right-input">
+                <div class="inputDiv" >
+                    <input type="password" class="inputBox" id='password1' style="ime-mode: disabled;" onpaste="return false"  oncopy="return false" oncut="false" >
+                </div>
+            </div>
+            <div class="bottom-tips" > <span id="psw1TipsText" ></span>  </div>
+        </div>
+        <div class="right-line">
+            <div class="right-input">
+                <div class="inputDiv" >
+                    <input type="password" class="inputBox" id='password2' style="ime-mode: disabled;"  onpaste="return false"  oncopy="return false" oncut="false">
+                </div>
+            </div>
+            <div class="bottom-tips" > <span id="psw2TipsText"></span></div>
+        </div>
+
+        <div class="right-line">
+            <div class="right-input">
+                <input type="button" value="注册" id='registerEnsure' class="registerEnsure" >
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script type="text/javascript" >
+
+    $(function () {
+        var nameCheck=false;
+        var emailCheck=false;
+        var psw1Check=false;
+        var psw2Check=false;
+
+        var $usernameErrorElm=$('#nameTipsText');
+
+        var lastUserName=$('#name').val().trim();
+        var lastEmail=$('#name').val().trim();
+
+        $('.inputBox').blur(function (){
+            $(this).keyup()
+        })
+
+        $('#name').blur(function (){
+            var username=$('#name').val().trim();
+            if (username!==lastUserName){
+                $(this).keyup()
+                if (nameCheck){
+                    $.get("../userNameCheck?userName="+username,
+                        function(data){
+                            if (data!=='true'){
+                                $usernameErrorElm.text("昵称已存在")
+                                nameCheck=false;
+                            }
+                        },
+                        "html"
+                    );
+                }
+                lastUserName=username;
+            }
+        })
+
+        $('#email').blur(function (){
+            var email=$('#email').val().trim();
+            if (email!==lastEmail){
+                $(this).keyup()
+                if (emailCheck){
+                    $.get("../emailCheck?email="+email,
+                        function(data){
+                            if (data!=='true'){
+                                $('#emailTipsText').text("邮箱已注册")
+                                nameCheck=false;
+                            }
+                        },
+                        "html"
+                    );
+                }
+                lastEmail=email;
+            }
+        })
+
+        $('#name').keyup(function(){
+            var username=$('#name').val().trim();
+            var regExp=new RegExp("^[\u4e00-\u9fa5_a-zA-Z0-9_]+$")
+            if(username){
+                if(username.length<3){
+                    $usernameErrorElm.text("昵称过短");
+                    nameCheck=false;
+                }else{
+                    if(username.length>16){
+                        $usernameErrorElm.text("昵称过长");
+                        nameCheck=false;
+                    }else{
+                        if(regExp.test(username)){
+                            $usernameErrorElm.text("");
+                            nameCheck=true;
+                        }else{
+                            $usernameErrorElm.text("昵称无效");
+                            nameCheck=false;
+                        }
+                    }
+                }
+            }else{
+                $usernameErrorElm.text("昵称不能为空");
+                nameCheck=false;
+            }
+        })
+
+        $("#email").keyup(function(){
+            var regExp=/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            var email=$("#email").val()
+            email=email.trim()
+            if(regExp.test(email)){
+                $('#emailTipsText').text("")
+                emailCheck=true;
+            }else{
+                emailCheck=false;
+                $('#emailTipsText').text("邮箱地址无效")
+            }
+        })
+
+        $("#password1").keyup(function(){
+            var password=$("#password1").val().trim();
+            if(password.length>0){
+                if(password.length<8){
+                    $("#psw1TipsText").text("密码过短");
+                    psw1Check=false;
+                }else  if(password.length>16){
+                    $("#psw1TipsText").text("密码过长");
+                    psw1Check=false;
+                }else if(password.length>=8&&password.length<=16){
+                    var regExpMax=new RegExp("^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]{8,16}$");
+                    var regExpMin=new RegExp("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{8,16}$");
+                    if(regExpMax.test(password)){
+                        $("#psw1TipsText").text("密码强度：高");
+                        psw1Check=true;
+                    }else if(regExpMin.test(password)){
+                        $("#psw1TipsText").text("密码强度：中");
+                        psw1Check=true;
+                    }else {
+                        $("#psw1TipsText").text("密码强度：低");
+                        psw1Check=false;
+                    }
+                }
+
+            }else{
+                $("#psw1TipsText").text("必须填写密码");
+                psw1Check=false;
+            }
+        })
+
+        $("#password2").keyup(function(){
+            var password1=$("#password1").val().trim();
+            var password2=$("#password2").val().trim();
+            if(password1==password2){
+                $("#psw2TipsText").text("");
+                psw2Check=true;
+            }else {
+                $("#psw2TipsText").text("两次输入的密码不一致");
+                psw2Check=false;
+            }
+
+        })
+
+
+        $('#registerEnsure').click(function () {
+            $('.inputBox').blur()
+            if (nameCheck&&psw1Check&&psw2Check&&emailCheck){
+                var username=$('#name').val();
+                var password=$('#password1').val();
+                var email=$('#email').val();
+
+                $.post("../registerEnsure",
+                    {"name":username,"password":password,'email':email},
+                    function(data){
+                        if (data==='true'){
+                            $('tipText').text("注册成功，3秒后跳转到首页")
+                            setTimeout(function (){
+                                window.location.href = "../"
+                            },3000)
+                        }else {
+                            $('tipText').text("注册失败")
+                        }
+                    },
+                    "html"
+                );
+            }
+        })
+
+    })
+</script>
+</html>

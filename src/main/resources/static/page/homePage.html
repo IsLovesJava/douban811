@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios.min.js"></script>
+</head>
+<body>
+
+<div id="loginInfo">
+    <div v-if="isLogin">你好{{userName}}</div>
+    <div v-else><a href="../login">请登录</a></div>
+</div>
+<a href="../movie">电影</a>
+<a href="../book">书籍</a>
+<a href="../music">音乐</a>
+<a href="../tv">电视剧</a>
+</body>
+<script type="text/javascript">
+    var loginVue= new Vue({
+        el:"#loginInfo",
+        data:{
+            isLogin:false,
+            userName:""
+        },
+        created: function (){
+            axios({
+                method:'get',
+                url:'getLoginInfo',
+                header:{
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (res){
+                console.log(res.data)
+                loginVue.isLogin=res.data.isLogin
+                loginVue.userName=res.data.userName
+
+            })
+
+        }
+
+
+    })
+
+</script>
+</html>

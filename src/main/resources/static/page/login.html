@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>登录</title>
+    <script src="../js/jquery.min.js"></script>
+
+    <link rel="icon" href="favicon.png">
+    <style>
+        .code-div{
+            height: 100px;
+            border:3px solid red;
+            display: flex;
+            width: 600px;
+        }
+        .code-leftTips{
+            position: relative;
+            width: 100px;
+            height: 60px;
+            left: 10px;
+            user-select: none;
+            text-align: center;
+            line-height: 60px;
+            font-weight: 500;
+            font-size: 22px;
+            float: left;
+        }
+        .tips{
+            user-select: none;
+        }
+        .code-input-div{
+            height: 60px;
+        }
+        .code-input-div input{
+            height: 36px;
+        }
+        .code-img{
+            height:60px;
+        }
+        .code-error-div{
+            height: 36px;
+        }
+        .code-change-span{
+            height: 36px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bottomDiv">
+    <div id="line_2" class="line">
+        <span class="tips">用户名</span>
+        <span class="inputLine-span" >
+            <input type="text" placeholder="输入ID或者昵称" id='username' style="ime-mode: disabled;" >
+        </span>
+    </div>
+    <div id="usernameTips" class="tips" ></div>
+
+    <div id="line_3" class="line">
+        <span class="tips">密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+        <span class="inputLine-span" >
+            <input type="password" placeholder="请输入密码" style="ime-mode: disabled;" id='password' onpaste="return false"  oncopy="return false" oncut="false">
+        </span>
+    </div>
+    <div id="passwordTips" class="tips bottomTips" ></div>
+
+
+    <div id="code-line" class="code-div">
+        <div class="tips code-leftTips">验证码</div>
+        <div style="height: 100px;margin-left: 50px;">
+            <div class="code-input-div"><input type="text" placeholder=" 输入右侧图片中的6位验证码" id='codeInput' style="ime-mode: disabled;" ></div>
+            <div class="tips codeTips" id="codeTips" >123123</div>
+        </div>
+
+        <div class="" style="margin-left: 50px;height: 100px">
+            <img class="code-img" id="codePic" src="../getCode" /><br>
+
+            <span class="code-change-span tips">看不清？点击图片切换</span>
+        </div>
+
+    </div>
+
+    <div id="line_5" class="line">
+        <div class="ensure" >
+            <input type="button" id="login" value="登录" />
+        </div>
+        <div>
+            <input type="checkbox" id="rememberCheck">
+            <span class="tips">30天内自动登录</span><br>
+            <span class="tips">请勿在他人电脑上使用</span>
+        </div>
+    </div>
+    <div id="line_6" class="line" style="width: auto;height: auto;font-size: 16px;user-select: none" onclick="window.location.href='register.html'">
+        没有账号？点击注册
+    </div>
+</div>
+</body>
+<script src="../js/login.js"></script>
+</html>
